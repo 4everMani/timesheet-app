@@ -10,7 +10,7 @@ $dark-primary-text: rgba(black, 0.87);
 
 $light-primary-text: white;
 
-$primary: mat.define-palette(mat.$pink-palette, 500);
+$primary: mat.define-palette(mat.$indigo-palette, 700);
 
 $accent: mat.define-palette(mat.$deep-purple-palette, A200, A100, A400);
 
@@ -31,4 +31,19 @@ $theme: mat.define-light-theme((
 
 .mat-elevation-z10 {
   box-shadow: 0 6px 6px -3px #0003, 0 10px 14px 1px #00000024, 0 4px 18px 3px #0000001f !important;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  border-radius: 4px 4px 0 0;
+  padding: 0.75em 0.75em 0 0.75em;
+  background-color: white;
+}
+
+.mat-tab-label .mat-tab-label-content {
+  display: inline-flex;
+  font-size: large;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
 }

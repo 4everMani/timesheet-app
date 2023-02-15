@@ -1,0 +1,18 @@
+.flex {
+  display: flex;
+  justify-content: center;
+}
+
+.flex_col {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  height: 500px;
+}
+
+mat-tab-label .mat-tab-label-content{
+  font-size: large !important;
+}
