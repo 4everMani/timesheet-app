@@ -1,0 +1,35 @@
+.approv{
+  background-color: green;
+  color: white;
+}
+
+.card {
+  margin-top: 10px;
+  border-radius: 8px;
+  border-color: red;
+  border: solid #303f9f;
+}
+
+.decline {
+  background-color: red;
+  color: white;
+}
+
+.time {
+  margin-left: 10px;
+}
+
+.content {
+  font-size: medium;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.flex {
+  display: flex;
+  justify-items: start;
+}
+.description {
+  font-size: medium;
+  font-weight: bold;
+}

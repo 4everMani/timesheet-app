@@ -35,6 +35,11 @@ import { TimesheetComponent } from './timesheet/timesheet/timesheet.component';
 import { AddHoursComponent } from './timesheet/add-hours/add-hours.component';
 import { AddLeaveComponent } from './timesheet/add-leave/add-leave.component';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { TimesheetRecordsComponent } from './timesheet/timesheet-records/timesheet-records.component';
+import { LeaveRecordsComponent } from './timesheet/leave-records/leave-records.component';
+import { ApprovedComponent } from './timesheet/approved/approved.component';
+import { DeclinedComponent } from './timesheet/declined/declined.component';
+import { TimesheetListComponent } from './timesheet/timesheet-list/timesheet-list.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +50,11 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     TimesheetComponent,
     AddHoursComponent,
     AddLeaveComponent,
+    TimesheetRecordsComponent,
+    LeaveRecordsComponent,
+    ApprovedComponent,
+    DeclinedComponent,
+    TimesheetListComponent,
   ],
   imports: [
     BrowserModule,

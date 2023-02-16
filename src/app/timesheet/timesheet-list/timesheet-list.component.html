@@ -1,0 +1,8 @@
+<ng-container *ngIf="timesheetList && timesheetList.length > 0">
+  <div *ngFor="let timesheet of timesheetList">
+    <app-timesheet-records [timesheet]="timesheet"></app-timesheet-records>
+  </div>
+</ng-container>
+<ng-container *ngIf="!timesheetList">
+  <h3>No Record Found</h3>
+</ng-container>

@@ -1,11 +1,15 @@
 import { Time } from '@angular/common';
+import firebase from 'firebase/compat/app';
+import Timestamp = firebase.firestore.Timestamp;
 
-export class TimeSheet {
-  public craetedBy?: string;
-  public status?: string;
-  public startDate?: Date;
-  public startTime?: Time;
-  public endDate?: Date;
-  public endTime?: Time;
-  public description?: string;
+export interface TimeSheet {
+  id?: string;
+  craetedBy?: string;
+  status?: string;
+  startDate?: Timestamp;
+  startTime?: Time;
+  endDate?: Timestamp;
+  endTime?: Time;
+  description?: string;
+  documentUrl?: string;
 }

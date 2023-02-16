@@ -1,0 +1,14 @@
+.flex {
+  display: flex;
+  justify-content: center;
+}
+
+.flex_col {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card_width{
+  width: 800px;
+}

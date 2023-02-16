@@ -7,16 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./create-timesheet.component.scss'],
 })
 export class CreateTimesheetComponent implements OnInit {
-  public timesheetForm!: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.timesheetForm = this.fb.group({
-      startDate: [Date.now, Validators.required],
-      startTime: [Validators.required],
-      endDate: [Validators.required],
-      description: ['', Validators.required],
-    });
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {}
 }
