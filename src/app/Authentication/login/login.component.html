@@ -1,1 +1,25 @@
-<p>login works!</p>
+<div class="flex">
+  <h1>Login</h1>
+  <div class="login-form">
+    <form [formGroup]="loginForm">
+      <h4>Email/Phone</h4>
+      <div class="username-input">
+        <i class="fas fa-user"></i>
+        <input type="text" formControlName="email" />
+      </div>
+      <h4>Password</h4>
+      <div class="password-input">
+        <i class="fas fa-lock"></i>
+        <input type="password" formControlName="password" />
+      </div>
+    </form>
+  </div>
+  <button class="login-btn" (click)="onLogin()" [disabled]="!loginForm.valid">
+    LOGIN
+  </button>
+  <div class="alternative-signup">
+    <p>
+      Create an account? <a href="signup"><span>Signup</span></a>
+    </p>
+  </div>
+</div>

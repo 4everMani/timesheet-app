@@ -17,7 +17,6 @@ export class TimesheetComponent implements OnInit {
   }
 
   public loadTimesheets() {
-    console.log('triggered');
     this.timesheetObs = this.timesheetService.getAllInProgressTimesheet();
   }
 }

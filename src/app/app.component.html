@@ -1,7 +1,7 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav #start (click)="start.close()">
     <mat-nav-list>
-      <a mat-list-item routerLink="/">
+      <a mat-list-item routerLink="timesheet">
         <mat-icon>av_timer</mat-icon>
         <span class="icon-margin">TimeSheet</span>
       </a>
@@ -15,20 +15,28 @@
         <mat-icon>question_answer</mat-icon>
         <span class="icon-margin">About</span>
       </a>
-      <a mat-list-item routerLink="signup">
+      <a
+        mat-list-item
+        routerLink="signup"
+        *ngIf="authService.isLogout$ | async"
+      >
         <mat-icon>person_add</mat-icon>
         <span class="icon-margin">Register</span>
       </a>
 
-      <a mat-list-item routerLink="login">
+      <a mat-list-item routerLink="login" *ngIf="authService.isLogout$ | async">
         <mat-icon>account_circle</mat-icon>
         <span class="icon-margin">Login</span>
       </a>
 
-      <a mat-list-item>
+      <button
+        mat-list-item
+        (click)="authService.logout()"
+        *ngIf="authService.isLoggedIn$ | async"
+      >
         <mat-icon>exit_to_app</mat-icon>
         <span class="icon-margin">Logout</span>
-      </a>
+      </button>
     </mat-nav-list>
   </mat-sidenav>
 
