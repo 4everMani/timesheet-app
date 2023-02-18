@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { AuthService } from '../auth.service';
 
@@ -16,7 +17,7 @@ export class SignupComponent implements OnInit {
     private authService: AuthService,
     private route: Router
   ) {
-    this.signupForm = fb.group({
+    this.signupForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', Validators.required],
       isAdmin: [false],
@@ -28,8 +29,16 @@ export class SignupComponent implements OnInit {
 
   public onSignup(): void {
     const user = this.signupForm.value as User;
-    this.authService.signup(user).subscribe((res) => {
-      this.route.navigateByUrl('timesheet');
-    });
+    this.authService
+      .signup(user)
+      .pipe(
+        catchError((err) => {
+          alert('Unable to create account');
+          return throwError(err);
+        })
+      )
+      .subscribe((res) => {
+        this.route.navigateByUrl('timesheet');
+      });
   }
 }

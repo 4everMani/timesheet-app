@@ -3,17 +3,22 @@
     <mat-card class="card_width">
       <mat-card-title><h4>Timesheet Dashboard</h4></mat-card-title>
       <mat-card-content>
-        <mat-tab-group class="card_width">
+        <mat-tab-group class="card_width content">
           <mat-tab label="TimeSheet">
             <app-timesheet-list
+              [user]="user"
               [timesheetList]="(timesheetObs | async)!"
             ></app-timesheet-list>
           </mat-tab>
           <mat-tab label="Leaves">
             <app-leave-records></app-leave-records>
           </mat-tab>
-          <mat-tab label="Approved"> <app-approved></app-approved> </mat-tab>
-          <mat-tab label="Declined"> <app-declined></app-declined> </mat-tab>
+          <mat-tab label="Approved" *ngIf="isAdmin">
+            <app-approved></app-approved>
+          </mat-tab>
+          <mat-tab label="Declined" *ngIf="isAdmin">
+            <app-declined></app-declined>
+          </mat-tab>
         </mat-tab-group>
       </mat-card-content>
     </mat-card>

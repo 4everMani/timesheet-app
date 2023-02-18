@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { AuthService } from '../auth.service';
 
@@ -26,8 +27,30 @@ export class LoginComponent implements OnInit {
 
   public onLogin(): void {
     const user = this.loginForm.value as User;
-    this.authService.login(user).subscribe((res) => {
-      this.route.navigateByUrl('timesheet');
-    });
+    this.authService
+      .login(user)
+      .pipe(
+        catchError((err) => {
+          alert(`Email or password dedn't match!`);
+          return throwError(err);
+        })
+      )
+      .subscribe((res) => {
+        this.route.navigateByUrl('timesheet');
+      });
+  }
+
+  public onGoogleLogin(): void {
+    this.authService
+      .googleLogin()
+      .pipe(
+        catchError((err) => {
+          alert(`Google signin failed!`);
+          return throwError(err);
+        })
+      )
+      .subscribe((res) => {
+        this.route.navigateByUrl('timesheet');
+      });
   }
 }

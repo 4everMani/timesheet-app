@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { concatMap, from, map, Observable } from 'rxjs';
+import { BehaviorSubject, from, map, Observable } from 'rxjs';
 import { User } from '../models/user';
-import { convertSnaps } from '../timesheet/service/db-util';
+import { GoogleAuthProvider } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,8 @@ import { convertSnaps } from '../timesheet/service/db-util';
 export class AuthService {
   public isLoggedIn$!: Observable<boolean>;
   public isLogout$!: Observable<boolean>;
-  public user?: User;
+  private userSubject$ = new BehaviorSubject<User | undefined>(undefined);
+  public user$ = this.userSubject$.asObservable();
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -21,63 +22,50 @@ export class AuthService {
   ) {
     this.isLoggedIn$ = afAuth.authState.pipe(map((user) => !!user));
     this.isLogout$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
-    this.afAuth.authState
-      .pipe(
-        concatMap((res) => {
-          if (res?.uid) {
-            return this.db
-              .collection('users', (ref) => ref.where('id', '==', res.uid))
-              .get()
-              .pipe(
-                map((res) => {
-                  const results = convertSnaps<User>(res);
-                  this.user = results[0];
-                  return this.user;
-                })
-              );
-          }
-          return from([]);
-        })
-      )
-      .subscribe();
+    this.afAuth.authState.subscribe((res) => {
+      if (res?.uid) {
+        this.userSubject$.next(this.credentialUserMapper(res));
+      }
+    });
   }
 
-  public signup(user: User): Observable<any> {
+  public signup(user: User): Observable<string | undefined> {
     return from(
       this.afAuth.createUserWithEmailAndPassword(user.email!, user.password!)
     ).pipe(
-      concatMap((res) => {
-        user.id = res.user?.uid;
-        user.password = '';
-        return from(this.db.collection<User>('users').add(user)).pipe(
-          map((r) => r.id)
-        );
+      map((res) => {
+        res.user?.updateProfile({ displayName: user.name }).then();
+        return res.user?.uid;
       })
     );
   }
 
-  public login(user: User): Observable<User | undefined> {
+  public login(user: User): Observable<string | undefined> {
     return from(
       this.afAuth.signInWithEmailAndPassword(user.email!, user.password!)
-    ).pipe(
-      concatMap((res) => {
-        return this.db
-          .collection('users', (ref) => ref.where('id', '==', res.user?.uid))
-          .get()
-          .pipe(
-            map((res) => {
-              const results = convertSnaps<User>(res);
-              this.user = results[0];
-              return this.user;
-            })
-          );
+    ).pipe(map((res) => res.user?.uid));
+  }
+
+  public googleLogin(): Observable<string | undefined> {
+    return from(this.afAuth.signInWithPopup(new GoogleAuthProvider())).pipe(
+      map((res) => {
+        return res.user?.uid;
       })
     );
   }
 
   public logout() {
-    this.user = undefined;
+    this.userSubject$.next(undefined);
     this.afAuth.signOut();
     this.route.navigateByUrl('/login');
+  }
+
+  private credentialUserMapper(credential: any): User {
+    const user = new User();
+    user.email = credential.email!;
+    user.isAdmin = credential.email! === 'admin@tsm.com';
+    user.name = credential.displayName!;
+    user.id = credential.uid;
+    return user;
   }
 }

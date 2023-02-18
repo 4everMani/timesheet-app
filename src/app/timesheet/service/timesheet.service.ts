@@ -11,9 +11,7 @@ export class TimesheetService {
   constructor(private db: AngularFirestore) {}
 
   public addTimesheet(timesheet: Partial<TimeSheet>): Observable<any> {
-    const ref = this.db
-      .collection<TimeSheet>('timesheet-collection')
-      .add(timesheet);
+    const ref = this.db.collection<TimeSheet>('timesheets').add(timesheet);
     return from(ref).pipe(
       map((res) => {
         return res;
@@ -23,7 +21,20 @@ export class TimesheetService {
 
   public getAllInProgressTimesheet(): Observable<TimeSheet[]> {
     return this.db
-      .collection<TimeSheet>('timesheet-collection')
+      .collection<TimeSheet>('timesheets')
+      .get()
+      .pipe(
+        map((res) => {
+          return convertSnaps<TimeSheet>(res);
+        })
+      );
+  }
+
+  public getTimesheetByEmail(email: string): Observable<TimeSheet[]> {
+    return this.db
+      .collection<TimeSheet>('timesheets', (ref) =>
+        ref.where('createdByEmail', '==', email)
+      )
       .get()
       .pipe(
         map((res) => {

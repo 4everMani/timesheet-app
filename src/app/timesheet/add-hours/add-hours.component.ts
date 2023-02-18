@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { timestamp } from 'rxjs';
@@ -6,6 +6,7 @@ import { TimeSheet } from 'src/app/models/timesheet';
 import { TimesheetService } from '../service/timesheet.service';
 import { Firestore, Timestamp } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-add-hours',
@@ -14,6 +15,8 @@ import { Router } from '@angular/router';
 })
 export class AddHoursComponent implements OnInit {
   public timesheetForm!: FormGroup;
+
+  @Input() user?: User;
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +36,8 @@ export class AddHoursComponent implements OnInit {
 
   public addTimesheet(): void {
     const timesheet: Partial<TimeSheet> = {
-      craetedBy: 'Manish',
+      createdByName: this.user?.name,
+      createdByEmail: this.user?.email,
       description: this.timesheetForm.get('description')?.value,
       endDate: Timestamp.fromDate(
         moment(this.timesheetForm.get('endDate')?.value).toDate()

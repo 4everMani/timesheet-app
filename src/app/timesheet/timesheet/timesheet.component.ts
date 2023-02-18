@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { AuthService } from 'src/app/Authentication/auth.service';
 import { TimeSheet } from 'src/app/models/timesheet';
+import { User } from 'src/app/models/user';
 import { TimesheetService } from '../service/timesheet.service';
 
 @Component({
@@ -10,13 +12,28 @@ import { TimesheetService } from '../service/timesheet.service';
 })
 export class TimesheetComponent implements OnInit {
   public timesheetObs!: Observable<TimeSheet[]>;
-  constructor(private timesheetService: TimesheetService) {}
+  public isAdmin = false;
+  public user?: User;
+  constructor(
+    private timesheetService: TimesheetService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.loadTimesheets();
+    this.loadData();
   }
 
-  public loadTimesheets() {
-    this.timesheetObs = this.timesheetService.getAllInProgressTimesheet();
+  public loadData(): void {
+    this.authService.user$.subscribe((user) => {
+      if (user?.isAdmin) {
+        this.timesheetObs = this.timesheetService.getAllInProgressTimesheet();
+        this.isAdmin = true;
+        this.user = user;
+      } else {
+        this.timesheetObs = this.timesheetService.getTimesheetByEmail(
+          user?.email!
+        );
+      }
+    });
   }
 }

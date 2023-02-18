@@ -4,7 +4,8 @@ import Timestamp = firebase.firestore.Timestamp;
 
 export interface TimeSheet {
   id?: string;
-  craetedBy?: string;
+  createdByName?: string;
+  createdByEmail?: string;
   status?: string;
   startDate?: Timestamp;
   startTime?: Time;

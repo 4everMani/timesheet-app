@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TimeSheet } from 'src/app/models/timesheet';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-timesheet-records',
@@ -9,6 +10,9 @@ import { TimeSheet } from 'src/app/models/timesheet';
 export class TimesheetRecordsComponent implements OnInit {
   @Input()
   timesheet?: TimeSheet;
+
+  @Input()
+  user?: User;
 
   constructor() {}
 

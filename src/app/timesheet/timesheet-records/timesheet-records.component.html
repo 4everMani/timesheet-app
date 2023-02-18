@@ -4,7 +4,7 @@
       <mat-card-content>
         <div class="content">
           <span>Created By:</span>
-          <span> {{ timesheet.craetedBy }}</span>
+          <span> {{ timesheet.createdByName }}</span>
         </div>
         <div class="content">
           <span>Start Date:</span>
@@ -18,14 +18,20 @@
           <span class="time">End Time:</span>
           <span> {{ timesheet.endTime }}</span>
         </div>
-        <div class="flex">
-          <div class="description">Description:</div>
+        <div class="flex description content">
+          <div>Description:</div>
           <div class="time">
             {{ timesheet.description }}
           </div>
         </div>
+        <div *ngIf="!user?.isAdmin" class="flex description">
+          <div>Status:</div>
+          <div class="time">
+            {{ timesheet.status }}
+          </div>
+        </div>
       </mat-card-content>
-      <mat-card-actions>
+      <mat-card-actions *ngIf="user?.isAdmin">
         <button mat-button class="approv">Approve</button>
         <button mat-button class="decline">Decline</button>
       </mat-card-actions>

@@ -1,13 +1,18 @@
 <div class="flex">
   <div class="flex_col">
-    <mat-card class="card_width">
+    <mat-card class="card_width" *ngIf="!user!.isAdmin">
       <mat-card-title><h4>TimeSheet Details</h4></mat-card-title>
       <mat-card-content>
         <mat-tab-group>
-          <mat-tab label="Add Hours"> <app-add-hours></app-add-hours> </mat-tab>
+          <mat-tab label="Add Hours">
+            <app-add-hours [user]="user"></app-add-hours>
+          </mat-tab>
           <mat-tab label="Add Leave"> <app-add-leave></app-add-leave> </mat-tab>
         </mat-tab-group>
       </mat-card-content>
     </mat-card>
+    <mat-label *ngIf="user!.isAdmin"
+      >Admin can approve or decline a record but can not create</mat-label
+    >
   </div>
 </div>
