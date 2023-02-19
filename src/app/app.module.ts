@@ -40,6 +40,7 @@ import { LeaveRecordsComponent } from './timesheet/leave-records/leave-records.c
 import { ApprovedComponent } from './timesheet/approved/approved.component';
 import { DeclinedComponent } from './timesheet/declined/declined.component';
 import { TimesheetListComponent } from './timesheet/timesheet-list/timesheet-list.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { TimesheetListComponent } from './timesheet/timesheet-list/timesheet-lis
     MatDialogModule,
     MatDatepickerModule,
     MatMomentDateModule,
+    MatProgressBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

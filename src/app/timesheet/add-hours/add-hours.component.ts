@@ -48,6 +48,7 @@ export class AddHoursComponent implements OnInit {
       ),
       startTime: this.timesheetForm.get('startTime')?.value,
       status: 'In Progress',
+      type: 'workingHour',
     };
     this.timesheetService.addTimesheet(timesheet).subscribe((res) => {
       this.route.navigateByUrl('timesheet');

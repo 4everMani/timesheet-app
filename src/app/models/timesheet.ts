@@ -13,4 +13,5 @@ export interface TimeSheet {
   endTime?: Time;
   description?: string;
   documentUrl?: string;
+  type?: string;
 }

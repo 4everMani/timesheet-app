@@ -1,1 +1,64 @@
-<p>add-leave works!</p>
+<div class="top_margin">
+  <form [formGroup]="timesheetForm">
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="startDate" />
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <span>
+        <mat-icon class="icon_margin" (click)="picker.open()">history</mat-icon>
+        <span class="time_label">Start Time: </span>
+        <span type="time"> {{ timesheetForm.get("startTime")?.value }} </span>
+      </span>
+    </div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>End Date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker_end"
+          formControlName="endDate"
+        />
+        <mat-datepicker #picker_end></mat-datepicker>
+      </mat-form-field>
+      <span>
+        <mat-icon class="icon_margin" (click)="picker_end.open()"
+          >history</mat-icon
+        >
+        <span class="time_label">End Time: </span>
+        <span type="time"> {{ timesheetForm.get("endTime")?.value }} </span>
+      </span>
+    </div>
+    <div>
+      <div class="document">
+        <span class="title">Upload Document *</span>
+        <span>
+          <input type="file" (change)="uploadDocument($event)" />
+        </span>
+
+        <div class="flex" *ngIf="percentageChanges$ | async as percentage">
+          <mat-progress-bar
+            class="progress_bar"
+            mode="determinate"
+            [value]="percentage"
+          >
+          </mat-progress-bar>
+          <span>{{ percentage / 100 | percent }}</span>
+        </div>
+      </div>
+      <mat-form-field class="description-full-width" appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
+  </form>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="addTimesheet()"
+    [disabled]="!timesheetForm.valid"
+  >
+    Add
+  </button>
+</div>
