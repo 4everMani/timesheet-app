@@ -39,6 +39,7 @@ import { TimesheetRecordsComponent } from './timesheet/timesheet-records/timeshe
 import { TimesheetListComponent } from './timesheet/timesheet-list/timesheet-list.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LoaderComponent } from './loader/loader.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,12 @@ import { LoaderComponent } from './loader/loader.component';
     MatDatepickerModule,
     MatMomentDateModule,
     MatProgressBarModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
