@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { from, map, Observable } from 'rxjs';
+import { LoaderService } from 'src/app/loader/loader.service';
 import { TimeSheet } from 'src/app/models/timesheet';
 import { convertSnaps } from './db-util';
 
@@ -8,7 +9,10 @@ import { convertSnaps } from './db-util';
   providedIn: 'root',
 })
 export class TimesheetService {
-  constructor(private db: AngularFirestore) {}
+  constructor(
+    private db: AngularFirestore,
+    private loaderService: LoaderService
+  ) {}
 
   public addTimesheet(timesheet: Partial<TimeSheet>): Observable<any> {
     const ref = this.db.collection<TimeSheet>('timesheets').add(timesheet);
@@ -47,6 +51,7 @@ export class TimesheetService {
     id: string,
     changes: Partial<TimeSheet>
   ): Observable<any> {
+    this.loaderService.setLoader(true);
     return from(this.db.doc(`timesheets/${id}`).update(changes));
   }
 }

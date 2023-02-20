@@ -38,6 +38,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { TimesheetRecordsComponent } from './timesheet/timesheet-records/timesheet-records.component';
 import { TimesheetListComponent } from './timesheet/timesheet-list/timesheet-list.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     AddLeaveComponent,
     TimesheetRecordsComponent,
     TimesheetListComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,

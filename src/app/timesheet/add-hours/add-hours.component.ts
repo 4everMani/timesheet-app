@@ -7,6 +7,7 @@ import { TimesheetService } from '../service/timesheet.service';
 import { Firestore, Timestamp } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
+import { LoaderService } from 'src/app/loader/loader.service';
 
 @Component({
   selector: 'app-add-hours',
@@ -21,6 +22,7 @@ export class AddHoursComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private timesheetService: TimesheetService,
+    private loaderService: LoaderService,
     private route: Router
   ) {
     this.timesheetForm = this.fb.group({
@@ -35,6 +37,7 @@ export class AddHoursComponent implements OnInit {
   ngOnInit(): void {}
 
   public addTimesheet(): void {
+    this.loaderService.setLoader(true);
     const timesheet: Partial<TimeSheet> = {
       createdByName: this.user?.name,
       createdByEmail: this.user?.email,
@@ -51,6 +54,7 @@ export class AddHoursComponent implements OnInit {
       type: 'workingHour',
     };
     this.timesheetService.addTimesheet(timesheet).subscribe((res) => {
+      this.loaderService.setLoader(false);
       this.route.navigateByUrl('timesheet');
     });
   }

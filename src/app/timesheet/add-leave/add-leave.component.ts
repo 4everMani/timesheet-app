@@ -14,6 +14,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
+import { LoaderService } from 'src/app/loader/loader.service';
 import { TimeSheet } from 'src/app/models/timesheet';
 import { User } from 'src/app/models/user';
 import { TimesheetService } from '../service/timesheet.service';
@@ -34,7 +35,8 @@ export class AddLeaveComponent implements OnInit {
     private fb: FormBuilder,
     private timesheetService: TimesheetService,
     private route: Router,
-    private store: AngularFireStorage
+    private store: AngularFireStorage,
+    private loaderService: LoaderService
   ) {
     this.timesheetForm = this.fb.group({
       startDate: [null, Validators.required],
@@ -75,6 +77,7 @@ export class AddLeaveComponent implements OnInit {
   }
 
   public addTimesheet(): void {
+    this.loaderService.setLoader(true);
     const timesheet: Partial<TimeSheet> = {
       createdByName: this.user?.name,
       createdByEmail: this.user?.email,
@@ -91,8 +94,8 @@ export class AddLeaveComponent implements OnInit {
       type: 'leave',
       documentUrl: this.timesheetForm.get('documentUrl')?.value,
     };
-    console.log(timesheet);
     this.timesheetService.addTimesheet(timesheet).subscribe((res) => {
+      this.loaderService.setLoader(false);
       this.route.navigateByUrl('timesheet');
     });
   }

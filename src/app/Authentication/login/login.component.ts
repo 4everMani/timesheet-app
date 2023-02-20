@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { LoaderService } from 'src/app/loader/loader.service';
 import { User } from 'src/app/models/user';
 import { AuthService } from '../auth.service';
 
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private route: Router
+    private route: Router,
+    private loaderService: LoaderService
   ) {
     this.loginForm = fb.group({
       email: ['', Validators.required],
@@ -27,15 +29,18 @@ export class LoginComponent implements OnInit {
 
   public onLogin(): void {
     const user = this.loginForm.value as User;
+    this.loaderService.setLoader(true);
     this.authService
       .login(user)
       .pipe(
         catchError((err) => {
           alert(`Email or password dedn't match!`);
+          this.loaderService.setLoader(false);
           return throwError(err);
         })
       )
       .subscribe((res) => {
+        this.loaderService.setLoader(false);
         this.route.navigateByUrl('timesheet');
       });
   }

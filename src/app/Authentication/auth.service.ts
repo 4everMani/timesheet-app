@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject, from, map, Observable } from 'rxjs';
+import { BehaviorSubject, from, map, Observable, tap } from 'rxjs';
 import { User } from '../models/user';
 import { GoogleAuthProvider } from '@angular/fire/auth';
+import { LoaderService } from '../loader/loader.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,14 +20,17 @@ export class AuthService {
   constructor(
     private afAuth: AngularFireAuth,
     private db: AngularFirestore,
-    private route: Router
+    private route: Router,
+    private loaderService: LoaderService
   ) {
     this.isLoggedIn$ = afAuth.authState.pipe(map((user) => !!user));
     this.isLogout$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
+    this.loaderService.setLoader(true);
     this.afAuth.authState.subscribe((res) => {
       if (res?.uid) {
         this.userSubject$.next(this.credentialUserMapper(res));
       }
+      this.loaderService.setLoader(false);
     });
   }
 
