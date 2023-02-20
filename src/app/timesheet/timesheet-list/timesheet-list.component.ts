@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TimeSheet } from 'src/app/models/timesheet';
 import { User } from 'src/app/models/user';
 
@@ -13,7 +13,20 @@ export class TimesheetListComponent implements OnInit {
   @Input()
   user?: User;
 
+  @Input()
+  isApproveTab = false;
+
+  @Input()
+  isDeclineTab = false;
+
+  @Output()
+  statusChanged: EventEmitter<boolean> = new EventEmitter<boolean>(false);
+
   constructor() {}
 
   ngOnInit(): void {}
+
+  public onStatusChenge(): void {
+    this.statusChanged.emit(true);
+  }
 }

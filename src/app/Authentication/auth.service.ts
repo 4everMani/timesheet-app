@@ -14,6 +14,7 @@ export class AuthService {
   public isLogout$!: Observable<boolean>;
   private userSubject$ = new BehaviorSubject<User | undefined>(undefined);
   public user$ = this.userSubject$.asObservable();
+  private name = '';
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -30,6 +31,7 @@ export class AuthService {
   }
 
   public signup(user: User): Observable<string | undefined> {
+    this.name = user.name!;
     return from(
       this.afAuth.createUserWithEmailAndPassword(user.email!, user.password!)
     ).pipe(
@@ -64,7 +66,7 @@ export class AuthService {
     const user = new User();
     user.email = credential.email!;
     user.isAdmin = credential.email! === 'admin@tsm.com';
-    user.name = credential.displayName!;
+    user.name = credential.displayName ?? this.name;
     user.id = credential.uid;
     return user;
   }

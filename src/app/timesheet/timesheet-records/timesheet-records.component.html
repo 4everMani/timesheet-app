@@ -2,9 +2,15 @@
   <div class="card" *ngIf="timesheet">
     <mat-card>
       <mat-card-content>
-        <div class="content">
+        <div [ngClass]="timesheet.documentUrl ? 'content_first' : 'content'">
           <span>Created By:</span>
           <span> {{ timesheet.createdByName }}</span>
+          <span class="document" *ngIf="timesheet.documentUrl">
+            <mat-icon class="download">download</mat-icon>
+            <a [href]="timesheet.documentUrl" target="_blank">
+              <span>View document</span>
+            </a>
+          </span>
         </div>
         <div class="content">
           <span>Start Date:</span>
@@ -31,9 +37,23 @@
           </div>
         </div>
       </mat-card-content>
-      <mat-card-actions *ngIf="user?.isAdmin">
-        <button mat-button class="approv">Approve</button>
-        <button mat-button class="decline">Decline</button>
+      <mat-card-actions *ngIf="user?.isAdmin && !isApproveTab && !isDeclineTab">
+        <button mat-button class="approv" (click)="changeStatus('approved')">
+          Approve
+        </button>
+        <button mat-button class="decline" (click)="changeStatus('declined')">
+          Decline
+        </button>
+      </mat-card-actions>
+      <mat-card-actions *ngIf="user?.isAdmin && isDeclineTab">
+        <button mat-button class="approv" (click)="changeStatus('approved')">
+          Approve
+        </button>
+      </mat-card-actions>
+      <mat-card-actions *ngIf="user?.isAdmin && isApproveTab">
+        <button mat-button class="decline" (click)="changeStatus('declined')">
+          Decline
+        </button>
       </mat-card-actions>
     </mat-card>
   </div>

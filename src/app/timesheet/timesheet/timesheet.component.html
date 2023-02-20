@@ -8,16 +8,31 @@
             <app-timesheet-list
               [user]="user"
               [timesheetList]="(timesheetObs | async)!"
+              (statusChanged)="loadData()"
             ></app-timesheet-list>
           </mat-tab>
           <mat-tab label="Leaves">
-            <app-leave-records></app-leave-records>
+            <app-timesheet-list
+              [user]="user"
+              [timesheetList]="(leaveObs | async)!"
+              (statusChanged)="loadData()"
+            ></app-timesheet-list>
           </mat-tab>
-          <mat-tab label="Approved" *ngIf="isAdmin">
-            <app-approved></app-approved>
+          <mat-tab label="Approved">
+            <app-timesheet-list
+              [user]="user"
+              [isApproveTab]="true"
+              [timesheetList]="(approvedObs | async)!"
+              (statusChanged)="loadData()"
+            ></app-timesheet-list>
           </mat-tab>
-          <mat-tab label="Declined" *ngIf="isAdmin">
-            <app-declined></app-declined>
+          <mat-tab label="Declined">
+            <app-timesheet-list
+              [isDeclineTab]="true"
+              [user]="user"
+              [timesheetList]="(declinedObs | async)!"
+              (statusChanged)="loadData()"
+            ></app-timesheet-list>
           </mat-tab>
         </mat-tab-group>
       </mat-card-content>

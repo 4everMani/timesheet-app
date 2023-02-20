@@ -42,4 +42,11 @@ export class TimesheetService {
         })
       );
   }
+
+  public updateStatus(
+    id: string,
+    changes: Partial<TimeSheet>
+  ): Observable<any> {
+    return from(this.db.doc(`timesheets/${id}`).update(changes));
+  }
 }

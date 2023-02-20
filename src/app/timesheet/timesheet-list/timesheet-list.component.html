@@ -1,7 +1,10 @@
 <ng-container *ngIf="timesheetList && timesheetList.length > 0">
   <div *ngFor="let timesheet of timesheetList">
     <app-timesheet-records
+      (statusChanges)="onStatusChenge()"
       [timesheet]="timesheet"
+      [isApproveTab]="isApproveTab"
+      [isDeclineTab]="isDeclineTab"
       [user]="user"
     ></app-timesheet-records>
   </div>
