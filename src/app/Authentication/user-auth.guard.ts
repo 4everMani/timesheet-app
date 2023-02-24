@@ -7,7 +7,7 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { map, Observable, of } from 'rxjs';
+import { map, Observable, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +18,13 @@ export class UserAuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    return this.afAuth.authState.pipe(map((res) => !!res));
+    return this.afAuth.authState.pipe(
+      map((res) => !!res),
+      tap((res) => {
+        if (!res) {
+          this.route.navigateByUrl('/login');
+        }
+      })
+    );
   }
 }

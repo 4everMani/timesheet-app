@@ -31,14 +31,6 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
   },
-  // {
-  //     path: "about",
-  //     component: AboutComponent
-  // },
-  // {
-  //     path: 'courses/:id',
-  //     component: CourseComponent
-  // },
   {
     path: '**',
     redirectTo: '/',

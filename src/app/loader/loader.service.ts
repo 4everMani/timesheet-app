@@ -11,7 +11,6 @@ export class LoaderService {
   constructor() {}
 
   public setLoader(flag: boolean): void {
-    console.log('flag', flag);
     this.loaderSubject$.next(flag);
   }
 }

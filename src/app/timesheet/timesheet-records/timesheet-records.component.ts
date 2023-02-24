@@ -36,7 +36,11 @@ export class TimesheetRecordsComponent implements OnInit {
   public changeStatus(status: string): void {
     this.timesheet!.status = status;
     this.timesheetService
-      .updateStatus(this.timesheet?.id!, this.timesheet!)
+      .updateStatus(
+        this.timesheet?.id!,
+        this.timesheet!,
+        this.timesheet?.createdByEmail!
+      )
       .subscribe((res) => {
         this.loader.setLoader(false);
         this.statusChanges.emit(true);

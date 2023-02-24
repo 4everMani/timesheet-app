@@ -6,6 +6,7 @@ import { BehaviorSubject, from, map, Observable, tap } from 'rxjs';
 import { User } from '../models/user';
 import { GoogleAuthProvider } from '@angular/fire/auth';
 import { LoaderService } from '../loader/loader.service';
+import { NotificationService } from '../notifications.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,8 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private db: AngularFirestore,
     private route: Router,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private notificationService: NotificationService
   ) {
     this.isLoggedIn$ = afAuth.authState.pipe(map((user) => !!user));
     this.isLogout$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
@@ -29,19 +31,20 @@ export class AuthService {
     this.afAuth.authState.subscribe((res) => {
       if (res?.uid) {
         this.userSubject$.next(this.credentialUserMapper(res));
+        this.addPushNotificationCredentials(res.email!);
       }
       this.loaderService.setLoader(false);
     });
   }
 
-  public signup(user: User): Observable<string | undefined> {
+  public signup(user: User): Observable<string | null | undefined> {
     this.name = user.name!;
     return from(
       this.afAuth.createUserWithEmailAndPassword(user.email!, user.password!)
     ).pipe(
       map((res) => {
         res.user?.updateProfile({ displayName: user.name }).then();
-        return res.user?.uid;
+        return res.user?.email;
       })
     );
   }
@@ -52,10 +55,10 @@ export class AuthService {
     ).pipe(map((res) => res.user?.uid));
   }
 
-  public googleLogin(): Observable<string | undefined> {
+  public googleLogin(): Observable<string | null | undefined> {
     return from(this.afAuth.signInWithPopup(new GoogleAuthProvider())).pipe(
       map((res) => {
-        return res.user?.uid;
+        return res.user?.email;
       })
     );
   }
@@ -73,5 +76,29 @@ export class AuthService {
     user.name = credential.displayName ?? this.name;
     user.id = credential.uid;
     return user;
+  }
+
+  public addPushNotificationCredentials(email: string): void {
+    if (this.notificationService.sub !== undefined) {
+      const cred = {
+        email: email,
+        sub: this.notificationService.sub,
+      };
+      this.db
+        .collection('notifications', (ref) => ref.where('email', '==', email))
+        .get()
+        .pipe(
+          tap((res) => {
+            if (res.empty) {
+              from(this.db.collection('notifications').add(cred)).subscribe();
+            } else {
+              res.forEach((ele) => {
+                this.db.doc(`notifications/${ele.id}`).update(cred).then();
+              });
+            }
+          })
+        )
+        .subscribe();
+    }
   }
 }

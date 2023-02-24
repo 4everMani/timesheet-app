@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
@@ -17,7 +18,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private route: Router,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private db: AngularFirestore
   ) {
     this.loginForm = fb.group({
       email: ['', Validators.required],
@@ -41,6 +43,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe((res) => {
         this.loaderService.setLoader(false);
+        this.authService.addPushNotificationCredentials(user.email!);
         this.route.navigateByUrl('timesheet');
       });
   }
@@ -56,6 +59,9 @@ export class LoginComponent implements OnInit {
       )
       .subscribe((res) => {
         this.route.navigateByUrl('timesheet');
+        if (res) {
+          this.authService.addPushNotificationCredentials(res);
+        }
       });
   }
 }
