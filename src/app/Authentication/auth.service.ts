@@ -31,7 +31,9 @@ export class AuthService {
     this.afAuth.authState.subscribe((res) => {
       if (res?.uid) {
         this.userSubject$.next(this.credentialUserMapper(res));
-        this.addPushNotificationCredentials(res.email!);
+        if (this.user$ === undefined) {
+          this.addPushNotificationCredentials(res.email!);
+        }
       }
       this.loaderService.setLoader(false);
     });
