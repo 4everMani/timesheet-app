@@ -43,6 +43,7 @@ export class SignupComponent implements OnInit {
       )
       .subscribe((res) => {
         this.loaderService.setLoader(false);
+        this.authService.addPushNotificationCredentials(res!);
         this.route.navigateByUrl('timesheet');
       });
   }
